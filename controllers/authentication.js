@@ -1,4 +1,19 @@
+const jwt = require('jwt-simple');
+const config = require('../config');
 const User = require('../models/user');
+
+function tokenForUser(user) {
+    const timestamp = new Date().getTime();
+    return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+}
+
+exports.signin = function(req, res, next) {
+    // User has already had their email and password auth'd via the middleware.
+    // We just need to give them a token.
+
+    // The passport middleware added the req.user field.
+    res.send({ token: tokenForUser(req.user) });
+}
 
 exports.signup = function(req, res, next) {
     const email = req.body.email;
@@ -28,7 +43,7 @@ exports.signup = function(req, res, next) {
                 return next(err);
             }
 
-            res.json({ success: true });
+            res.json({ token: tokenForUser(user) });
         });
     });
 
