@@ -1,2 +1,2 @@
 ## Simple NodeJS application
-Just a simple NodeJS application using express.
+A simple NodeJS application using express for learning.
